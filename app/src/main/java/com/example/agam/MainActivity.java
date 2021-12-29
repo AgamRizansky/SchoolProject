@@ -40,8 +40,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private Dialog d;
     private Button btnDialogCode;
     private Button btnLogout;
-     TextView idDisplay;
-     String userId;
+    private TextView idDisplay;
+    private String userId;
 
 
     ArrayList<String> dataList = new ArrayList<>();
@@ -95,10 +95,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null){
-
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else {
-
             userId = mAuth.getCurrentUser().getUid();
 
             DocumentReference documentReference = mStore.collection("users").document(userId);
@@ -142,14 +140,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             d.hide();
         }
         else if (view == btnLogout){
-           FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+           mAuth.signOut();
+            //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            signOutUser();
 
                 //enabling the logOut button//
 
         }
     //checks when buttons clicked//
     }
+
+    private void signOutUser() {
+        Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
+        loginActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(loginActivity);
+        finish();
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -159,4 +166,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         //when item is clicked in the list -> opens a new chat page//
 
     }
+
+
 }
