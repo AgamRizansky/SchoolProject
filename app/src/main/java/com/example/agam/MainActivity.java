@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +23,8 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -43,6 +46,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private TextView idDisplay;
     private String userId;
 
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    //private DatabaseReference usersDb = db.getInstance().getReference("Users:");
+
 
     ArrayList<String> dataList = new ArrayList<>();
     ArrayAdapter<String> adapter1;
@@ -50,12 +56,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         FirebaseAuth mAuth;
         FirebaseFirestore mStore;
 
+       DatabaseReference usersDb;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
-            //Intent intent2 = new Intent(this, RegisterActivity.class);
-            //startActivity(intent2);
+
 
             btnLogout = findViewById(R.id.btnLogout);
             list1 = findViewById(R.id.list1);
@@ -64,15 +71,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
             mAuth = FirebaseAuth.getInstance();
             mStore = FirebaseFirestore.getInstance();
- //          userId = mAuth.getCurrentUser().getUid();
-//
-//            DocumentReference documentReference = mStore.collection("users").document(userId);
-//            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-//                @Override
-//                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-//                    idDisplay.setText (documentSnapshot.getString("uniqID"));
-//                }
-//            });
+
 
             //dataList.add("string 1");
             adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
@@ -81,22 +80,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
             list1.setOnItemClickListener(this);
             btnLogout.setOnClickListener(this);
-
-//            btnLogout.setOnClickListener(view ->{
-//                mAuth.signOut();
-//                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                //enabling the logOut button//
-//            });
         }
 
 
     @Override
     protected void onStart() {
+            //checks if there is an account logged in://
+            // if positive --> showing the mainActiviy page.//
+            //if negetive --> showing the login page.//
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else {
+
             userId = mAuth.getCurrentUser().getUid();
 
             DocumentReference documentReference = mStore.collection("users").document(userId);
@@ -107,12 +104,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 }
             });
         }
-        //checks if there is an account logged in://
-        // if positive --> showing the mainActiviy page.//
-        //if negetive --> showing the login page.//
+
     }
 
-    public void createLoginDialog(){
+    public void createLoginDialog(){//opens the dialog for adding chats//
             d = new Dialog(this);
             d.setContentView(R.layout.chat_dialog);
             d.setTitle("Add Chat");
@@ -121,51 +116,54 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             btnDialogCode = (Button)d.findViewById(R.id.btnDialogCode);
             btnDialogCode.setOnClickListener(this);
             d.show();
-            //opens the dialog for adding chats//
+
         }
 
 
     @Override
-    public void onClick(View view) {
-        //String editedCode = code.getText().toString();
-        if (view == addChat){
+    public void onClick(View view) {  //checks when buttons clicked//
+        if (view == addChat){//opens dialog//
             createLoginDialog();
-            //Toast.makeText(this, "clicked +", Toast.LENGTH_SHORT).show();
-            //the line above is for test if the + button is clickable//
+
         }
+
         else if (view == btnDialogCode){
             String editedCode = code.getText().toString();
             dataList.add(editedCode);
             list1.setAdapter(adapter1);
             d.hide();
         }
-        else if (view == btnLogout){
-           mAuth.signOut();
-            //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            signOutUser();
 
-                //enabling the logOut button//
+        else if (view == btnLogout){//enabling the logOut button//
+            idDisplay.setText("");
+            if (mAuth != null){
+                signOutUser();
+                //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                System.exit(0);
+            }
 
         }
-    //checks when buttons clicked//
+
+
     }
 
     private void signOutUser() {
-        Intent loginActivity = new Intent(MainActivity.this, LoginActivity.class);
-        loginActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(loginActivity);
-        finish();
+        try {
+            mAuth.signOut();
+            Toast.makeText(this, "User Sign out!", Toast.LENGTH_SHORT).show();
+        }catch (Exception e) {
+            Log.e("SIGN OUT", "onClick: Exception "+e.getMessage(),e );
+        }
+
     }
 
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-           // dataList.get(position);
+           //dataList.get(position);
         Intent intent = new Intent(this,ChatActivity.class);
         startActivity(intent);
         //when item is clicked in the list -> opens a new chat page//
 
     }
-
-
 }

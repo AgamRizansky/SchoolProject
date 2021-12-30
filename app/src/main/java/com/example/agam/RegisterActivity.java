@@ -18,11 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -38,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
+//    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+//    private DatabaseReference usersDb = db.getReference().child("Users:");
 
 
     @Override
@@ -79,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()){
                        Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                        userID = mAuth.getCurrentUser().getUid();
-                       uniqID = "123456789";
+                       uniqID = createUniqID(10); //"123456789";
                         DocumentReference documentReference = mStore.collection("users").document(userID);
                         Map<String,Object> user = new HashMap<>();
                         user.put("ID " , userID);
@@ -91,10 +96,26 @@ public class RegisterActivity extends AppCompatActivity {
                                 Log.d(TAG, "onSuccess: user profile is created for "+ userID);
                             }
                         });
+//                        usersDb.setValue(email);
+//                        HashMap<String, String> userMap = new HashMap<>();
+//                        userMap.put("Email ", email);
+//                        userMap.put("Public ID ", uniqID);
+//                        usersDb.push().setValue(userMap);
+
+
                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     }else{
                         Toast.makeText(RegisterActivity.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
+                }
+
+                private String createUniqID(int length) {
+                    String str = "";
+                    Random rand = new Random();
+                    for (int i =0; i< length; i++){
+                        str += "" + (rand.nextInt(9)+1);
+                    }
+                    return str;
                 }
             });
         }
