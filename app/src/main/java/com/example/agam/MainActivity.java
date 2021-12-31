@@ -5,6 +5,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -80,7 +83,25 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
             list1.setOnItemClickListener(this);
             btnLogout.setOnClickListener(this);
+
+
         }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+                int d = item.getItemId();
+                if(d==R.id.logout_btn){
+                    signOutUser();
+                }
+                return true;
+    }
+
 
 
     @Override
@@ -94,6 +115,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else {
 
+
             userId = mAuth.getCurrentUser().getUid();
 
             DocumentReference documentReference = mStore.collection("users").document(userId);
@@ -104,7 +126,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 }
             });
         }
-
     }
 
     public void createLoginDialog(){//opens the dialog for adding chats//
@@ -156,6 +177,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
 
     }
+
 
 
     @Override

@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Widget.Theme.Agam.MyView" parent="">
+    <style name="Widget.Theme.Agam.MyView" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:background">@color/gray_600</item>
         <item name="exampleColor">@color/light_blue_600</item>
     </style>
