@@ -8,6 +8,13 @@
 
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/idDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:text="TextView" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,21 +28,23 @@
             android:onClick="onClick"
             android:text="logout" />
 
-        <TextView
-            android:id="@+id/idDisplay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
+        <SearchView
+            android:id="@+id/searchBar"
+            android:layout_width="312dp"
+            android:layout_height="match_parent" />
+
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0" />
 
     <ListView
         android:id="@+id/list1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1">
-
-    </ListView>
+        android:layout_weight="1"/>
 
     <ImageView
         android:id="@+id/addChat"
@@ -44,4 +53,6 @@
         android:layout_gravity="bottom|right"
         android:onClick="onClick"
         android:src="@drawable/plus" />
+
+
 </LinearLayout>
