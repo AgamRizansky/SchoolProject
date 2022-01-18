@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,8 +22,11 @@ import android.widget.Toast;
 //import com.example.agam.ui.login.LoginActivity;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -49,8 +52,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private TextView idDisplay;
     private String userId;
 
+
+   // private DatabaseReference mUsersDatabase;
+
+
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
-    //private DatabaseReference usersDb = db.getInstance().getReference("Users:");
+
 
 
     ArrayList<String> dataList = new ArrayList<>();
@@ -59,18 +66,21 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         FirebaseAuth mAuth;
         FirebaseFirestore mStore;
 
-       DatabaseReference usersDb;
+
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
+            //mUsersDatabase = FirebaseDatabase.getInstance().getReference("users");
 
             btnLogout = findViewById(R.id.btnLogout);
             list1 = findViewById(R.id.list1);
             addChat = findViewById(R.id.addChat);
             idDisplay = findViewById(R.id.idDisplay);
+
+
 
             mAuth = FirebaseAuth.getInstance();
             mStore = FirebaseFirestore.getInstance();
@@ -128,6 +138,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
     }
 
+
+
+
+
     public void createLoginDialog(){//opens the dialog for adding chats//
             d = new Dialog(this);
             d.setContentView(R.layout.chat_dialog);
@@ -166,7 +180,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
 
 
+
     }
+
+
 
     private void signOutUser() {
         try {
