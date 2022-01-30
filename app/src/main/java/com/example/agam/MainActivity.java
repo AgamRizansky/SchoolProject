@@ -74,7 +74,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-
+    private String shortId;
 
     ArrayList<String> dataList = new ArrayList<>();
     ArrayAdapter<String> arrayAdapter;
@@ -148,6 +148,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     idDisplay.setText(documentSnapshot.getString("uniqID "));
+                    shortId = (documentSnapshot.getString("uniqID "));
                 }
             });
 
@@ -247,6 +248,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
            //dataList.get(position);
         Intent intent = new Intent(this,ChatActivity.class);
+        intent.putExtra("user_id", userId);
+        intent.putExtra("user_short_id", shortId);
+        intent.putExtra("room_name",((TextView)view).getText().toString() );
         startActivity(intent);
         //when item is clicked in the list -> opens a new chat page//
 
