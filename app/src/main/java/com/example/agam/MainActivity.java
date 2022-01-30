@@ -38,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -52,16 +54,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private TextView idDisplay;
     private String userId;
 
-
+    private final DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
    // private DatabaseReference mUsersDatabase;
 
 
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
 
 
     ArrayList<String> dataList = new ArrayList<>();
-    ArrayAdapter<String> adapter1;
+    ArrayAdapter<String> arrayAdapter;
 
         FirebaseAuth mAuth;
         FirebaseFirestore mStore;
@@ -87,9 +89,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
 
             //dataList.add("string 1");
-            adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
+            arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
 
-            list1.setAdapter(adapter1);
+            list1.setAdapter(arrayAdapter);
 
             list1.setOnItemClickListener(this);
             btnLogout.setOnClickListener(this);
@@ -150,6 +152,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             code = (EditText)d.findViewById(R.id.code);
             btnDialogCode = (Button)d.findViewById(R.id.btnDialogCode);
             btnDialogCode.setOnClickListener(this);
+
+                Map<String,Object> map = new HashMap<String, Object>();
+                map.put(code.getText().toString(),"");
+                root.updateChildren(map);
+
             d.show();
 
         }
@@ -165,7 +172,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         else if (view == btnDialogCode){
             String editedCode = code.getText().toString();
             dataList.add(editedCode);
-            list1.setAdapter(adapter1);
+            list1.setAdapter(arrayAdapter);
             d.hide();
         }
 
