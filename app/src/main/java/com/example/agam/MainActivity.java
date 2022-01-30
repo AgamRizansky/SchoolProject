@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -40,6 +41,19 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
@@ -96,7 +110,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             list1.setOnItemClickListener(this);
             btnLogout.setOnClickListener(this);
 
-
         }
 
     @Override
@@ -137,6 +150,29 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                     idDisplay.setText(documentSnapshot.getString("uniqID "));
                 }
             });
+
+            root.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot datasnapshot) {
+
+                    Set<String> set = new HashSet<String>();
+                    Iterator i = datasnapshot.getChildren().iterator();
+
+                    while (i.hasNext()){
+                        set.add(((DataSnapshot)i.next()).getKey());
+                    }
+                    dataList.clear();
+                    dataList.addAll(set);
+
+                    arrayAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
     }
 
@@ -153,10 +189,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             btnDialogCode = (Button)d.findViewById(R.id.btnDialogCode);
             btnDialogCode.setOnClickListener(this);
 
-                Map<String,Object> map = new HashMap<String, Object>();
-                map.put(code.getText().toString(),"");
-                root.updateChildren(map);
-
             d.show();
 
         }
@@ -170,9 +202,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }
 
         else if (view == btnDialogCode){
-            String editedCode = code.getText().toString();
-            dataList.add(editedCode);
-            list1.setAdapter(arrayAdapter);
+//            String editedCode = code.getText().toString();
+//            dataList.add(editedCode);
+//            list1.setAdapter(arrayAdapter);
+
+            Map<String,Object> map = new HashMap<String, Object>();
+            map.put(code.getText().toString(),"");
+            root.updateChildren(map);
+
             d.hide();
         }
 
@@ -189,6 +226,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
 
     }
+
+
 
 
 
@@ -212,4 +251,5 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         //when item is clicked in the list -> opens a new chat page//
 
     }
+
 }
