@@ -27,6 +27,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_msg;
     private TextView chat_conversation;
 
+    private final int key =1;
+
     private String user_id,room_name,short_id;
     private DatabaseReference root ;
     private String temp_key;
@@ -79,7 +81,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
+    String encrypted = "";
     @Override
     public void onClick(View view) {
         if (view == btn_send_msg) {
@@ -90,8 +92,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             DatabaseReference message_root = root.child(temp_key);
             Map<String, Object> map2 = new HashMap<String, Object>();
 
+            char[] letters = input_msg.getText().toString().toCharArray();
+                for (char c : letters){
+                    c+= key;
+                    encrypted += c;
+
+                }
+
             //map2.put("id", user_id);
-            map2.put("msg", input_msg.getText().toString());
+            map2.put("encrypt_msg", encrypted);
+            //map2.put("msg", input_msg.getText().toString());
             map2.put("shortId", short_id);
             message_root.updateChildren(map2);
             input_msg.setText("");
@@ -99,16 +109,28 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String chat_msg,chat_user_name;
+    private String encrypt_msg = "";
 
     private void append_chat_conversation(DataSnapshot dataSnapshot){
         Iterator i = dataSnapshot.getChildren().iterator();
 
         while (i.hasNext()){
-            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
+            encrypt_msg = "";
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
+           //encrypt_msg = (String) ((DataSnapshot)i.next()).getValue();
+            chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
+
+            char[] to_text = chat_msg.toCharArray();
+                for (char b : to_text){
+                    b -=key;
+                    encrypt_msg +=b;
+                }
 
 
-            chat_conversation.append(chat_msg +" : "+chat_user_name +" \n");
+
+            //chat_conversation.append(chat_msg +" : "+chat_user_name +" \n");
+            chat_conversation.append(chat_user_name +" : "+ encrypt_msg +" \n");
+                encrypt_msg = "";
         }
     }
 
