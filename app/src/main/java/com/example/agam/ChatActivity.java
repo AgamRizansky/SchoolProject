@@ -27,7 +27,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private EditText input_msg;
     private TextView chat_conversation;
 
-    private final int key =1;
+    private final int key = 1;
 
     private String user_id,room_name,short_id;
     private DatabaseReference root ;
@@ -104,6 +104,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             //map2.put("msg", input_msg.getText().toString());
             map2.put("shortId", short_id);
             message_root.updateChildren(map2);
+            encrypted = "";
             input_msg.setText("");
         }
     }
@@ -115,7 +116,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         Iterator i = dataSnapshot.getChildren().iterator();
 
         while (i.hasNext()){
-            encrypt_msg = "";
             chat_msg = (String) ((DataSnapshot)i.next()).getValue();
            //encrypt_msg = (String) ((DataSnapshot)i.next()).getValue();
             chat_user_name = (String) ((DataSnapshot)i.next()).getValue();
