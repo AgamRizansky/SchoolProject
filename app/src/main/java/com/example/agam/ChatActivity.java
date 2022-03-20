@@ -47,7 +47,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         room_name = getIntent().getExtras().get("room_name").toString();
         setTitle(" Room - "+room_name);
 
-        root = FirebaseDatabase.getInstance().getReference().child(room_name);
+        root = FirebaseDatabase.getInstance().getReference().child("chats").child(room_name);
 
         btn_send_msg.setOnClickListener(this);
 

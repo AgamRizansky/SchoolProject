@@ -2,39 +2,38 @@ package com.example.agam;
 
 public class Users {
 
-    public String name,image, status;
+    public String userEmail, userId, userUniqId;
 
-    public Users(){
-
+    public Users() {
     }
 
-    public String getName() {
-        return name;
+    public Users(String userEmail, String userId, String userUniqId) {
+        this.userEmail = userEmail;
+        this.userId = userId;
+        this.userUniqId = userUniqId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public String getImage() {
-        return image;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public String getUserId() {
+        return userId;
     }
 
-    public String getStatus() {
-        return status;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getUserUniqId() {
+        return userUniqId;
     }
 
-    public Users(String name, String image, String status) {
-        this.name = name;
-        this.image = image;
-        this.status = status;
+    public void setUserUniqId(String userUniqId) {
+        this.userUniqId = userUniqId;
     }
 }

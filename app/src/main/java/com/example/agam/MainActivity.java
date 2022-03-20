@@ -82,6 +82,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         FirebaseAuth mAuth;
         FirebaseFirestore mStore;
 
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
+
 
 
         @Override
@@ -95,6 +98,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             list1 = findViewById(R.id.list1);
             addChat = findViewById(R.id.addChat);
             idDisplay = findViewById(R.id.idDisplay);
+
 
 
 
@@ -142,17 +146,36 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
 
             userId = mAuth.getCurrentUser().getUid();
-
-            DocumentReference documentReference = mStore.collection("users").document(userId);
-            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            reference = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
+            reference.addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    idDisplay.setText(documentSnapshot.getString("uniqID "));
-                    shortId = (documentSnapshot.getString("uniqID "));
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String userUniqId = snapshot.child("userUniqId").getValue().toString();
+                    String userEmail = snapshot.child("userEmail").getValue().toString();
+                    shortId = userUniqId;
+                    idDisplay.setText(userUniqId);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
             });
 
-            root.addValueEventListener(new ValueEventListener() {
+
+
+
+
+//            DocumentReference documentReference = mStore.collection("users").document(userId);
+//            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+//                @Override
+//                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+//                    idDisplay.setText(documentSnapshot.getString("uniqID "));
+//                    shortId = (documentSnapshot.getString("uniqID "));
+//                }
+//            });
+            reference = FirebaseDatabase.getInstance().getReference().child("chats");
+            reference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot datasnapshot) {
 
@@ -206,10 +229,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 //            String editedCode = code.getText().toString();
 //            dataList.add(editedCode);
 //            list1.setAdapter(arrayAdapter);
+            rootNode = FirebaseDatabase.getInstance();
+            reference = rootNode.getReference("chats");
 
             Map<String,Object> map = new HashMap<String, Object>();
             map.put(code.getText().toString(),"");
-            root.updateChildren(map);
+            reference.updateChildren(map);
 
             d.hide();
         }

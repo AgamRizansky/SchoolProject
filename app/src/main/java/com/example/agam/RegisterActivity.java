@@ -41,8 +41,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
-//    private FirebaseDatabase db = FirebaseDatabase.getInstance();
-//    private DatabaseReference usersDb = db.getReference().child("Users:");
+
+
+
+    FirebaseDatabase rootNode;
+    DatabaseReference reference;
 
 
     @Override
@@ -85,17 +88,33 @@ public class RegisterActivity extends AppCompatActivity {
                        Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
                        userID = mAuth.getCurrentUser().getUid();
                        uniqID = createUniqID(10); //"123456789";
-                        DocumentReference documentReference = mStore.collection("users").document(userID);
-                        Map<String,Object> user = new HashMap<>();
-                        user.put("ID " , userID);
-                        user.put("email " , email);
-                        user.put("uniqID " , uniqID);
-                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d(TAG, "onSuccess: user profile is created for "+ userID);
-                            }
-                        });
+                        rootNode = FirebaseDatabase.getInstance();
+                        reference = rootNode.getReference("users");
+                        String userEmail = email.toString();
+                        String userId = userID.toString();
+                        String userUniqId = uniqID.toString();
+
+                        Users helperClass = new Users(userEmail, userId,userUniqId);
+
+                        reference.child(userId).setValue(helperClass);
+
+
+
+
+//                        DocumentReference documentReference = mStore.collection("users").document(userID);
+//                        Map<String,Object> user = new HashMap<>();
+//                        user.put("ID " , userID);
+//                        user.put("email " , email);
+//                        user.put("uniqID " , uniqID);
+//                        documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void unused) {
+//                                Log.d(TAG, "onSuccess: user profile is created for "+ userID);
+//                            }
+//                        });
+
+
+
 //                        usersDb.setValue(email);
 //                        HashMap<String, String> userMap = new HashMap<>();
 //                        userMap.put("Email ", email);
