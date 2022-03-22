@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,6 +69,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private Button btnLogout;
     private TextView idDisplay;
     private String userId;
+    private EditText searchField;
 
     private final DatabaseReference root = FirebaseDatabase.getInstance().getReference().getRoot();
    // private DatabaseReference mUsersDatabase;
@@ -98,6 +101,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             list1 = findViewById(R.id.list1);
             addChat = findViewById(R.id.addChat);
             idDisplay = findViewById(R.id.idDisplay);
+            searchField = findViewById(R.id.searchField);
 
 
 
@@ -109,10 +113,29 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             //dataList.add("string 1");
             arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dataList);
 
+
             list1.setAdapter(arrayAdapter);
 
             list1.setOnItemClickListener(this);
             btnLogout.setOnClickListener(this);
+
+
+            searchField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    MainActivity.this.arrayAdapter.getFilter().filter(s);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
         }
 
