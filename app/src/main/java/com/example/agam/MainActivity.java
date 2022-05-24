@@ -162,6 +162,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             // if positive --> showing the mainActiviy page.//
             //if negetive --> showing the login page.//
         super.onStart();
+        //startActivity(new Intent(MainActivity.this, LoginActivity.class));
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null){
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -258,6 +259,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             Map<String,Object> map = new HashMap<String, Object>();
             map.put(code.getText().toString(),"");
             reference.updateChildren(map);
+            Chat chat = new Chat();
 
             d.hide();
         }
