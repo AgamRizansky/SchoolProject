@@ -2,7 +2,10 @@ package com.example.agam;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -88,6 +91,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
+    BroadcastReceiver broadcastReceiver = null;
+
 
 
         @Override
@@ -101,10 +106,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             list1 = findViewById(R.id.list1);
             addChat = findViewById(R.id.addChat);
             idDisplay = findViewById(R.id.idDisplay);
-            searchField = findViewById(R.id.searchField);
 
 
-
+            broadcastReceiver = new InternetReceiver();
+            Internetstatus();
 
             mAuth = FirebaseAuth.getInstance();
             mStore = FirebaseFirestore.getInstance();
@@ -306,4 +311,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     }
 
+    public void Internetstatus(){
+            registerReceiver(broadcastReceiver,new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
+    }
 }
