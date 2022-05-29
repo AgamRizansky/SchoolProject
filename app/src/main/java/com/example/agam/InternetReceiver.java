@@ -13,7 +13,7 @@ public class InternetReceiver extends BroadcastReceiver {
             Toast.makeText(context.getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();
         }
         else if(status.equals("disconnected")){
-            Toast.makeText(context.getApplicationContext(), "Please Connect TO The Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context.getApplicationContext(), "Please Connect To The Internet", Toast.LENGTH_SHORT).show();
         }
     }
 }
