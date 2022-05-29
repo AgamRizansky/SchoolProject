@@ -106,10 +106,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             list1 = findViewById(R.id.list1);
             addChat = findViewById(R.id.addChat);
             idDisplay = findViewById(R.id.idDisplay);
+            searchField = findViewById(R.id.searchField);
 
 
             broadcastReceiver = new InternetReceiver();
-            Internetstatus();
+            //Internetstatus();
 
             mAuth = FirebaseAuth.getInstance();
             mStore = FirebaseFirestore.getInstance();
@@ -125,22 +126,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             btnLogout.setOnClickListener(this);
 
 
-//            searchField.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    MainActivity.this.arrayAdapter.getFilter().filter(s);
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
+           searchField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+               }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    MainActivity.this.arrayAdapter.getFilter().filter(s);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
         }
 
@@ -167,6 +168,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
             // if positive --> showing the mainActiviy page.//
             //if negetive --> showing the login page.//
         super.onStart();
+        Internetstatus();
         //startActivity(new Intent(MainActivity.this, LoginActivity.class));
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null){
