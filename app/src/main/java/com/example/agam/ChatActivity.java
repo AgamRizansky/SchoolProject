@@ -4,13 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +39,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private DatabaseReference root ;
     private String temp_key;
 
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         setTitle(" Room - "+room_name);
 
         root = FirebaseDatabase.getInstance().getReference().child("chats").child(room_name);
+
+        mAuth = FirebaseAuth.getInstance();
 
         btn_send_msg.setOnClickListener(this);
 
@@ -132,6 +142,42 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             chat_conversation.append(chat_user_name +" : "+ encrypt_msg +" \n");
                 encrypt_msg = "";
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.back:
+                startActivity(new Intent(ChatActivity.this, MainActivity.class));
+                break;
+            case R.id.logout_btn:
+
+                if (mAuth != null) {
+                    signOutUser();
+                    //startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    System.exit(0);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void signOutUser() {
+        try {
+            mAuth.signOut();
+            Toast.makeText(this, "User Sign out!", Toast.LENGTH_SHORT).show();
+        }catch (Exception e) {
+            Log.e("SIGN OUT", "onClick: Exception "+e.getMessage(),e );
+        }
+
     }
 
 

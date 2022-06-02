@@ -8,6 +8,8 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -139,5 +141,24 @@ public class RegisterActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.login_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.login_btn:
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

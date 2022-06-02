@@ -74,5 +74,24 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.register_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.register_btn:
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
