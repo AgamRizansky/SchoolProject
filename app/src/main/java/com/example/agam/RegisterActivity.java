@@ -35,8 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
     public static final String TAG = "TAG";
     TextInputEditText etRegEmail;
     TextInputEditText etRegPassword;
+
+    TextInputEditText etRegName; //
+
     TextView tvLoginHere;
     Button btnRegister;
+
 
     String userID;
     String uniqID; //id that used like nicknames//
@@ -57,6 +61,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         etRegEmail = findViewById(R.id.etRegEmail);
         etRegPassword = findViewById(R.id.etRegPass);
+
+        etRegName = findViewById(R.id.etRegName); //
+
         tvLoginHere = findViewById(R.id.tvLoginHere);
         btnRegister = findViewById(R.id.btnRegister);
 
@@ -76,12 +83,17 @@ public class RegisterActivity extends AppCompatActivity {
         String email = etRegEmail.getText().toString();
         String password = etRegPassword.getText().toString();
 
+        String name = etRegName.getText().toString();  //
+
         if (TextUtils.isEmpty(email)) {
             etRegEmail.setError("Email cannot be empty");
             etRegEmail.requestFocus();
         } else if (TextUtils.isEmpty(password)) {
             etRegPassword.setError("Password cannot be empty");
             etRegPassword.requestFocus();
+        } else if (TextUtils.isEmpty(name)) {
+            etRegName.setError("User name cannot be empty");
+            etRegName.requestFocus();
         } else {
             mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
@@ -95,8 +107,9 @@ public class RegisterActivity extends AppCompatActivity {
                         String userEmail = email.toString();
                         String userId = userID.toString();
                         String userUniqId = uniqID.toString();
+                        String userName = name.toString();
 
-                        Users helperClass = new Users(userEmail, userId,userUniqId);
+                        Users helperClass = new Users(userEmail, userId, userUniqId, userName);
 
                         reference.child(userId).setValue(helperClass);
 

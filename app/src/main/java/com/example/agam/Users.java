@@ -2,15 +2,16 @@ package com.example.agam;
 
 public class Users {
 
-    public String userEmail, userId, userUniqId;
+    public String userEmail, userId, userUniqId, userName;
 
     public Users() {
     }
 
-    public Users(String userEmail, String userId, String userUniqId) {
+    public Users(String userEmail, String userId, String userUniqId, String userName) {
         this.userEmail = userEmail;
         this.userId = userId;
         this.userUniqId = userUniqId;
+        this.userName = userName;
     }
 
     public String getUserEmail() {
@@ -33,7 +34,14 @@ public class Users {
         return userUniqId;
     }
 
-    public void setUserUniqId(String userUniqId) {
-        this.userUniqId = userUniqId;
+    public String getUserName() {
+        return userName;
     }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
 }
+

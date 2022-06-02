@@ -35,7 +35,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private final int key = 1;
 
-    private String user_id,room_name,short_id;
+    private String user_id,room_name,short_id, user_name;
     private DatabaseReference root ;
     private String temp_key;
 
@@ -52,6 +52,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         short_id = getIntent().getExtras().get("user_short_id").toString();
         user_id = getIntent().getExtras().get("user_id").toString();
+
+        user_name = getIntent().getExtras().get("user_name").toString();
+
         room_name = getIntent().getExtras().get("room_name").toString();
         setTitle(" Room - "+room_name);
 
@@ -112,7 +115,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             //map2.put("id", user_id);
             map2.put("encrypt_msg", encrypted);
             //map2.put("msg", input_msg.getText().toString());
-            map2.put("shortId", short_id);
+
+          // map2.put("userName", user_name);
+            map2.put("userName", user_name);
+            //map2.put("shortId", short_id);
+
+
             message_root.updateChildren(map2);
             encrypted = "";
             input_msg.setText("");

@@ -88,6 +88,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         FirebaseAuth mAuth;
         FirebaseFirestore mStore;
 
+        String userName;
+
     FirebaseDatabase rootNode;
     DatabaseReference reference;
 
@@ -143,6 +145,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 }
             });
 
+
         }
 
     @Override
@@ -164,6 +167,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
     @Override
     protected void onStart() {
+
+
             //checks if there is an account logged in://
             // if positive --> showing the mainActiviy page.//
             //if negetive --> showing the login page.//
@@ -176,6 +181,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         }else {
 
 
+
             userId = mAuth.getCurrentUser().getUid();
             reference = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
             reference.addValueEventListener(new ValueEventListener() {
@@ -183,8 +189,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String userUniqId = snapshot.child("userUniqId").getValue().toString();
                     String userEmail = snapshot.child("userEmail").getValue().toString();
+                    userName = snapshot.child("userName").getValue().toString();
+
                     shortId = userUniqId;
-                    idDisplay.setText(userUniqId);
+                    idDisplay.setText("Hello "+ userName);
                 }
 
                 @Override
@@ -192,6 +200,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
                 }
             });
+
+
 
 
 
@@ -228,6 +238,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
 
                 }
             });
+
+
+
+
         }
     }
 
@@ -308,6 +322,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         intent.putExtra("user_id", userId);
         intent.putExtra("user_short_id", shortId);
         intent.putExtra("room_name",((TextView)view).getText().toString() );
+        intent.putExtra("user_name", userName);
         startActivity(intent);
         //when item is clicked in the list -> opens a new chat page//
 
